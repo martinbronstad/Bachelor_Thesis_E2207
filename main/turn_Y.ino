@@ -42,18 +42,18 @@ int sumy1 = (u_y + u_z);
 int sumy2 = (-u_y + u_z);
 
 //Saturation
-if(sumy1>= 100){
-  sumy1 = 100;
+if(sumy1>= 255){
+  sumy1 = 255;
 }
-else if(sumy1<=(-100)){
-  sumy1 = -100;
+else if(sumy1<=(-255)){
+  sumy1 = -255;
 }
 
-if(sumy2>= 100){
-  sumy2 = 100;
+if(sumy2>= 255){
+  sumy2 = 255;
 }
-else if(sumy2<=(-100)){
-  sumy2 = -100;
+else if(sumy2<=(-255)){
+  sumy2 = -255;
 }
 
   if(sumy1>=0){

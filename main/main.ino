@@ -1,5 +1,5 @@
 #include <KickFiltersRT.h>
-
+//#include <SimpleKalmanFilter.h>
  // PARAMETERS - PINS
 // Motor driver 1 (x-axis) RIGHT DRIVER
 #define IN_Y_4 9 // RED Input 1 and 2 on the motor driver controls the polarity of coil X1
@@ -29,12 +29,12 @@ const float Voltageconstant = 5000.00/10240.00; // ((10/3)/1024) * (5/((10)/3));
 const float Voltageoffset = 250; //2500 mV * 1/AMP * mV/G
 
 // Constants
-int MAX_OUTPUT_X = 60;
-int MIN_OUTPUT_X = -60;
-int MAX_OUTPUT_Y = 60;
-int MIN_OUTPUT_Y = -60;
-int MAX_OUTPUT_Z = 20;
-int MIN_OUTPUT_Z = -20;
+int MAX_OUTPUT_X = 255;
+int MIN_OUTPUT_X = -255;
+int MAX_OUTPUT_Y = 255;
+int MIN_OUTPUT_Y = -255;
+int MAX_OUTPUT_Z = 100;
+int MIN_OUTPUT_Z = -100;
 
 #define KP_X 2.6
 #define KD_X 1.0
@@ -74,7 +74,7 @@ const float fs = 1.0/0.000062;
 void Sensor_Read() { //Reads the sensors and gives back the differance in Geuss.
   
   for (int i = 0; i <= 2; i++) {
-    Sensor_readings[i] = anaogRead(Sensor_pins[i]);
+    Sensor_readings[i] = analogRead(Sensor_pins[i]);
     /*
     if (i == 0){
       Serial.print(Sensor_readings[i]);
@@ -88,6 +88,8 @@ void Sensor_Read() { //Reads the sensors and gives back the differance in Geuss.
     Sensor_readings[i] *= Voltageconstant;
     Sensor_readings[i] -= Voltageoffset;
     }
+    //Sensor_readings[1] = filters[0].lowpass(Sensor_readings[0], 30, fs);
+    //Sensor_readings[2] = filter[0].updateEstimate(Sensor_readings[0]);
 }
 
 
@@ -205,16 +207,16 @@ void loop() {
 
 
   //PRINT: INPUT/OUTPUT
-  
-  //Serial.println(Sensor_readings[0]);
+  /*
+  Serial.println(Sensor_readings[0]);
   //Serial.println(Sensor_readings[1]);
-  //Serial.println(micros());
+  Serial.println(micros());
   
   
   //Serial.print(20);
   //Serial.print(" ");
   //Serial.println(35);
-  
+  */
   
   Serial.print(Sensor_readings[0]);
   Serial.print(" ");
@@ -235,7 +237,7 @@ void loop() {
   //turn_X(round(output_x), round(output_z)); 
   //turn_Y(round(output_y), round(output_z));
   
-
+/*
   //digitalWrite(IN_X_1, HIGH);
   //digitalWrite(IN_X_2, LOW);
   //digitalWrite(IN_X_3, HIGH);
@@ -258,5 +260,5 @@ void loop() {
     analogWrite(ENABLE_Y_A, 0);
     analogWrite(ENABLE_Y_B, 0);
    }
-  
+  */
 }

@@ -42,18 +42,18 @@ int sumx1 = (u_x + u_z);
 int sumx2 = (-u_x + u_z);
 
 //Saturation
-if(sumx1>= 100){
-  sumx1 = 100;
+if(sumx1>= 255){
+  sumx1 = 255;
 }
-else if(sumx1<=(-100)){
-  sumx1 = -100;
+else if(sumx1<=(-255)){
+  sumx1 = -255;
 }
 
-if(sumx2>= 100){
-  sumx2 = 100;
+if(sumx2>= 255){
+  sumx2 = 255;
 }
-else if(sumx2<=(-100)){
-  sumx2 = -100;
+else if(sumx2<=(-255)){
+  sumx2 = -255;
 }
   if(sumx1>=0){
     digitalWrite(IN_X_1, LOW);
