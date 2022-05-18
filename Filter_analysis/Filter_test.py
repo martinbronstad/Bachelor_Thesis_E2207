@@ -8,7 +8,7 @@ Kalman_readings = []
 with open ('Filterdata_norm_LP_KALMAN_10bit_4A_inside.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
     file_content = file.read()
     Split = file_content.split('\n')
-    for i in range(2500, 4000): # You change the range to determine how much data you want to parse, Max = len(Split)
+    for i in range(151000, 211000): # You change the range to determine how much data you want to parse, Max = len(Split)
         New_Split = Split[i].split(" ")
         Raw_readings.append(New_Split[0])
         LP_readings.append(New_Split[1])
@@ -27,11 +27,12 @@ Raw = list(Raw_readings)
 LP = list(LP_readings)
 Kalman = list(Kalman_readings)
 
-
-plt.plot(range(0, len(Raw)), Raw, color="blue")
-plt.plot(range(0, len(LP)), LP, color="red")
-plt.plot(range(0, len(Kalman)), Kalman, color="yellow")
-plt.figure(dpi=1000)
+plt.figure(dpi=100)
+plt.step(range(0, len(Raw)), Raw, color="blue", label="rawdata", where="post")
+plt.step(range(0, len(Kalman)), Kalman, color="yellow", label="Kalman", where="post")
+plt.step(range(0, len(LP)), LP, color="red", label="LP", where="post")
+plt.legend()
+#plt.savefig("Filter_speed.svg", format="svg")
 plt.show()
 
 
