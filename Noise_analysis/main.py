@@ -4,10 +4,10 @@ Time_readings = []
 
 
 
-with open ('Sensor_data_X_A.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
+with open ('Sensor_data_10bit_4A_inside.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
     file_content = file.read()
     Split = file_content.split('\n')
-    for i in range(201, 601): # You change the range to determine how much data you want to parse, Max = len(Split)
+    for i in range(201, 1001): # You change the range to determine how much data you want to parse, Max = len(Split)
         if (i % 2) == 0:
             Sensor_readings.append(Split[i])
         else:
