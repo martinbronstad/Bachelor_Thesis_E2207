@@ -86,16 +86,6 @@ classdef maglevSystem < handle
             B = Bs + Bm;
         end
         
-        function Bs = computeSolenoidMagneticField(obj,p,u)
-            Bs = arrayfun(@(obj) solenoid.magneticField(obj,p(1,:),p(2,:),p(3,:)), obj.SOLENOIDS, 'UniformOutput', false);
-            Bs = sum(pagemtimes(reshape([Bs{:}],size(Bs{1},1),size(Bs{1},2),length(Bs)),reshape(u,1,1,length(u))),3);
-        end
-        
-        function Bm = computePermanentMagneticField(obj,p)
-            Bm = arrayfun(@(obj) solenoid.magneticField(obj,p(1,:),p(2,:),p(3,:)), obj.MAGNETS, 'UniformOutput', false);
-            Bm = sum(reshape([Bm{:}],size(Bm{1},1),size(Bm{1},2),length(Bm)),3);
-        end
-        
         function [F,T] = computeMagneticForce(obj,u)
             if obj.approximationType == 0
                 p = [obj.LEVITATINGMAGNET.X(:,floor(end/2),floor(end/2)),obj.LEVITATINGMAGNET.Y(:,floor(end/2),floor(end/2)),obj.LEVITATINGMAGNET.Z(:,floor(end/2),floor(end/2))]';
@@ -113,8 +103,8 @@ classdef maglevSystem < handle
             f = obj.LEVITATINGMAGNET.I*cross(l,B);
             t = cross(r,f);
             if obj.approximationType == 0
-                F = 1*obj.LEVITATINGMAGNET.nh*obj.LEVITATINGMAGNET.nr*sum(f,2);
-                T = 1*obj.LEVITATINGMAGNET.nh*obj.LEVITATINGMAGNET.nr*sum(t,2);
+                F = obj.LEVITATINGMAGNET.nh*obj.LEVITATINGMAGNET.nr*sum(f,2);
+                T = obj.LEVITATINGMAGNET.nh*obj.LEVITATINGMAGNET.nr*sum(t,2);
             else
                 F = sum(f,2);
                 T = sum(t,2);
