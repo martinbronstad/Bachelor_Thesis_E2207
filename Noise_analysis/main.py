@@ -4,10 +4,10 @@ Time_readings = []
 
 
 
-with open ('new_Sensor_data_X_A.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
+with open ('Sensor_data_X_A.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
     file_content = file.read()
     Split = file_content.split('\n')
-    for i in range(10000, 10200): # You change the range to determine how much data you want to parse, Max = len(Split)
+    for i in range(201, 601): # You change the range to determine how much data you want to parse, Max = len(Split)
         if (i % 2) == 0:
             Sensor_readings.append(Split[i])
         else:
@@ -19,9 +19,9 @@ Time_readings = map(float, Time_readings)
 Sensor = list(Sensor_readings)
 Time = list(Time_readings)
 
-plt.figure(dpi=400)
-plt.plot(range(0, len(Sensor)), Sensor)
-
+plt.figure(dpi=200)
+plt.step(range(0, len(Sensor)), Sensor, where="post")
+#plt.savefig("12bit_old_sensorreading_noise.svg", format="svg")
 plt.show()
 
 #print(Sensor)
@@ -36,7 +36,7 @@ MICROS = sum(Microcheck)/len(Microcheck)
 #print(Microcheck)
 print(MICROS)
 
-Datapoints = ([i for i,x in enumerate(Sensor) if x>=516]) # Checks at which datapoints the values the specific value or higher is found, and how many
+Datapoints = ([i for i,x in enumerate(Sensor) if x>=519]) # Checks at which datapoints the values the specific value or higher is found, and how many
 #print(Datapoints)
 
 Differances = [] # This show the step length between the values found in Datapoints, and gives an average.
@@ -49,9 +49,9 @@ print(Averages)
 
 Realdata = []
 for i in range (0, len(Differances)): #This is used to check the step differances beteeen different tops.
-    if Differances[i] >= 5:
-        Realdata.append( 1 / (Differances[i] * MICROS * 10**(-6)))
+    if Differances[i] >= 3:
+        Realdata.append(Differances[i])
 
-print(Realdata)
+#print(Realdata)
 print(sum(Realdata)/len(Realdata))
 
