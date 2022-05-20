@@ -107,7 +107,7 @@ for i = 1:steps
 end
 %% Defining the transfer function for the solenoid current
 
-num = [0 12];
+num = [0 10.3];
 den = [0.604 14];
 sys = tf(num,den)
 
