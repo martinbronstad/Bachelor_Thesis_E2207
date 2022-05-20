@@ -48,7 +48,7 @@ for j = 1:length(R)
 end
 
 plot(zr,zeros(size(zr)),'black--', 'linewidth', 2)
-ylabel('$F_z$','interpreter','latex','fontsize',20)
-xlabel('$z$','interpreter','latex','fontsize',20)
+ylabel('$\frac{F_z}{m} - g$','interpreter','latex','fontsize',20)
+xlabel('$z_m$','interpreter','latex','fontsize',20)
 title('Z-plot','interpreter','latex','fontsize',15)
 grid; hold off; legend(labels);
