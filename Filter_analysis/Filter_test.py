@@ -5,7 +5,7 @@ LP_readings = []
 Kalman_readings = []
 
 
-with open ('Filterdata_norm_LP_KALMAN_10bit_4A_inside.txt') as file: #Open the datafiles, and splits them into the sensorvalues, and the microsecond the sensor was read
+with open ('Filterdata_norm_LP_KALMAN_10bit_4A_inside.txt') as file:
     file_content = file.read()
     Split = file_content.split('\n')
     for i in range(151000, 211000): # You change the range to determine how much data you want to parse, Max = len(Split)
@@ -27,7 +27,9 @@ Raw = list(Raw_readings)
 LP = list(LP_readings)
 Kalman = list(Kalman_readings)
 
-plt.figure(dpi=100)
+
+
+plt.figure(dpi=400)
 plt.step(range(0, len(Raw)), Raw, color="blue", label="rawdata", where="post")
 plt.step(range(0, len(Kalman)), Kalman, color="yellow", label="Kalman", where="post")
 plt.step(range(0, len(LP)), LP, color="red", label="LP", where="post")

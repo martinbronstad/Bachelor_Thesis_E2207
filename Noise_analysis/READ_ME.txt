@@ -7,16 +7,14 @@ Line 3: Sensordata from the second reading
 Line 4: Sensordata from the start of the code at the point of the second sensor reading.
 and so forth.....
 
-Additional parameters: 10 bit resolution on the ADC.
-For test A and C, ADC averaging was put on 4.
-
-The documents labeled A are readings taken while there was no external magnetic force applied to the system.
-The documents labeled B are readings taken at the same setup as "A", but the averaging from the ADC is turned off.
-The documents labeled C are readings taken while the magnet was approximatly 43 mm up from the sensors of the system. NB! This placement might be quite inaccurate.
-The documents labeled D are readings taken at the same setup as "C", but with the averaging from the ADC turned off.
-See the pictures for referance.
+Sensor_data_10bit_4A_inside: ADC resolution set to 10 bits, ADC Averaging set to 4
+Sensor_data_12bit_4A_inside: ADC resolution set to 12 bits, ADC Averaging set to 4.
 
 
-The microsecond recording is not that important, but shows that the sample rate was stable at 64-65 microseconds per sample for A and C. And at around 19-20 for B.
+In Old_noise_data there is old data from previous tests where the microcontroller was connected to the system through cables from the outside.
+
+
+
+The microsecond recording is not that important, but shows that the sample rate was stable and could be used to determine the Hz of the noise
 
 To get a better look at the signal you should open the code in an IDE to change some variables.
