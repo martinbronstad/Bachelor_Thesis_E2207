@@ -2,20 +2,20 @@
 #include <SimpleKalmanFilter.h>
  // PARAMETERS - PINS
 // Motor driver 1 
-#define IN_Y_4 9 // RED Input 1 and 2 on the motor driver controls the polarity of coil X1
-#define IN_Y_3 10 //ORANGE
-#define IN_X_2 11 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil X2
-#define IN_X_1 12 // GREEN
-#define ENABLE_Y_B 8 // BROWN Enable coil X1 - pwm signals to control the currents
-#define ENABLE_X_A 14 // BLUE  Enable coil X2
+#define IN_X_2 9 // RED Input 1 and 2 on the motor driver controls the polarity of coil X1
+#define IN_X_1 10 //ORANGE
+#define IN_Y_2 11 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil X2
+#define IN_Y_1 12 // GREEN
+#define ENABLE_X_A 8 // BROWN Enable coil X1 - pwm signals to control the currents
+#define ENABLE_Y_A 14 // BLUE  Enable coil X2
 
 // Motor driver 2
-#define IN_X_4 3 // RED Input 1 and 2 on the motor driver controls the polarity of coil Y1
-#define IN_X_3 4 //ORANGE
-#define IN_Y_1 5 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil Y2
-#define IN_Y_2 6 //GREEN
-#define ENABLE_X_B 2 // BROWN Enable coil Y1 - pwm signals to control the currents
-#define ENABLE_Y_A 7// BLUE Enable coil Y2
+#define IN_Y_4 3 // RED Input 1 and 2 on the motor driver controls the polarity of coil Y1
+#define IN_Y_3 4 //ORANGE
+#define IN_X_3 5 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil Y2
+#define IN_X_4 6 //GREEN
+#define ENABLE_Y_B 2 // BROWN Enable coil Y1 - pwm signals to control the currents
+#define ENABLE_X_B 7// BLUE Enable coil Y2
 
 //Sensor pins
 #define Sensor_1_x 17 //YELLOW
@@ -76,8 +76,8 @@ void Sensor_Read() { //Reads the sensors and gives back the differance in Geuss.
     Sensor_readings[i] = analogRead(Sensor_pins[i]);
     
     // Filters, only one of them should be enabled at the time
-    //Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs); 
-    Sensor_readings[i] = filter[i].updateEstimate(Sensor_readings[0]);
+    Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs); //LP
+    //Sensor_readings[i] = filter[i].updateEstimate(Sensor_readings[0]); //Kalman
     
     Sensor_readings[i] *= Voltageconstant;
     Sensor_readings[i] -= Voltageoffset;
@@ -212,8 +212,11 @@ void loop() {
   Serial.println(round(output_z)); // the last value is followed by a carriage return and a newline characters.
   
   
-  
+ 
+
   turn_X(round(output_x), round(output_z)); 
   turn_Y(round(output_y), round(output_z));
+
+  
   
 }
