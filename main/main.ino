@@ -1,7 +1,7 @@
 #include <KickFiltersRT.h>
-//#include <SimpleKalmanFilter.h>
+#include <SimpleKalmanFilter.h>
  // PARAMETERS - PINS
-// Motor driver 1 (x-axis) RIGHT DRIVER
+// Motor driver 1 
 #define IN_Y_4 9 // RED Input 1 and 2 on the motor driver controls the polarity of coil X1
 #define IN_Y_3 10 //ORANGE
 #define IN_X_2 11 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil X2
@@ -9,7 +9,7 @@
 #define ENABLE_Y_B 8 // BROWN Enable coil X1 - pwm signals to control the currents
 #define ENABLE_X_A 14 // BLUE  Enable coil X2
 
-// Motor driver 2 (y-axis)
+// Motor driver 2
 #define IN_X_4 3 // RED Input 1 and 2 on the motor driver controls the polarity of coil Y1
 #define IN_X_3 4 //ORANGE
 #define IN_Y_1 5 // YELLOW Input 3 and 4 on the motor driver controls the polarity of coil Y2
@@ -23,8 +23,8 @@
 #define Sensor_1_z 15 //WHITE
 byte Sensor_pins[] = {Sensor_1_x, Sensor_1_y, Sensor_1_z};
 float Sensor_readings[3];
-// (((((RAW SENSOR VALUE * 5000/4096) - 2500) * 1/SENSOR_AMP) * mV/G)
-// Sensor_AMP = 5, mV/G = 1.0/2.0
+// (((((RAW SENSOR VALUE * 5000/ADCresolution) - 2500) * 1/SENSOR_AMP) * Hall mV/G)
+// Sensor_AMP = 5, mV/G = 2.0
 const float Voltageconstant = 5000.00/10240.00; // ((10/3)/1024) * (5/((10)/3)); Calculates from 3.3 V datalogic to mV in 5 V logic.
 const float Voltageoffset = 250; //2500 mV * 1/AMP * mV/G
 
@@ -64,10 +64,9 @@ float previous_output_y = 0.0;
 float previous_output_z = 0.0;
 
 
-//SimpleKalmanFilter filter[] = {SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1)};
-
-
+SimpleKalmanFilter filter[] = {SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1)};
 KickFiltersRT<float> filters[3];
+
 
 const float fs = 1.0/0.000062;
 
@@ -75,21 +74,14 @@ void Sensor_Read() { //Reads the sensors and gives back the differance in Geuss.
   
   for (int i = 0; i <= 2; i++) {
     Sensor_readings[i] = analogRead(Sensor_pins[i]);
-    /*
-    if (i == 0){
-      Serial.print(Sensor_readings[i]);
-      Serial.print(' ');
-      Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs);
-      //Sensor_readings[i] = filter[i].updateEstimate(Sensor_readings[i]);
-      Serial.println(Sensor_readings[i]);
-    }
-    */
-    Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs);
+    
+    // Filters, only one of them should be enabled at the time
+    //Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs); 
+    Sensor_readings[i] = filter[i].updateEstimate(Sensor_readings[0]);
+    
     Sensor_readings[i] *= Voltageconstant;
     Sensor_readings[i] -= Voltageoffset;
     }
-    //Sensor_readings[1] = filters[0].lowpass(Sensor_readings[0], 30, fs);
-    //Sensor_readings[2] = filter[0].updateEstimate(Sensor_readings[0]);
 }
 
 
@@ -207,24 +199,11 @@ void loop() {
 
 
   //PRINT: INPUT/OUTPUT
-  /*
-  Serial.println(Sensor_readings[0]);
-  //Serial.println(Sensor_readings[1]);
-  Serial.println(micros());
-  
-  
-  //Serial.print(20);
-  //Serial.print(" ");
-  //Serial.println(35);
-  */
-  
   Serial.print(Sensor_readings[0]);
   Serial.print(" ");
   Serial.print(Sensor_readings[1]); 
   Serial.print(" ");
   Serial.print(Sensor_readings[2]);
-  
-  
   Serial.print(" "); // a space ' ' or  tab '\t' character is printed between the  values.
   Serial.print(round(output_x));
   Serial.print(" "); // a space ' ' or  tab '\t' character is printed between the two values.
@@ -234,31 +213,7 @@ void loop() {
   
   
   
-  //turn_X(round(output_x), round(output_z)); 
-  //turn_Y(round(output_y), round(output_z));
+  turn_X(round(output_x), round(output_z)); 
+  turn_Y(round(output_y), round(output_z));
   
-/*
-  //digitalWrite(IN_X_1, HIGH);
-  //digitalWrite(IN_X_2, LOW);
-  //digitalWrite(IN_X_3, HIGH);
-  //digitalWrite(IN_X_4, LOW);
-  //digitalWrite(IN_Y_1, HIGH);
-  //digitalWrite(IN_Y_2, LOW);
-  //digitalWrite(IN_Y_4, HIGH);
-  //digitalWrite(IN_Y_3, LOW);
-  
-   if (millis() > 5000)
-   {
-    //analogWrite(ENABLE_X_A, 0);
-    //analogWrite(ENABLE_X_B, 256);
-    //analogWrite(ENABLE_Y_A, 250);
-    //analogWrite(ENABLE_Y_B, 250);
-   }
-   else {
-    analogWrite(ENABLE_X_A, 0);
-    analogWrite(ENABLE_X_B, 0);
-    analogWrite(ENABLE_Y_A, 0);
-    analogWrite(ENABLE_Y_B, 0);
-   }
-  */
 }
