@@ -64,8 +64,8 @@ float previous_output_y = 0.0;
 float previous_output_z = 0.0;
 
 
-SimpleKalmanFilter filter[] = {SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1)};
-KickFiltersRT<float> filters[3];
+SimpleKalmanFilter Kalmanfilter[3] = {SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1), SimpleKalmanFilter(5, 5, 1)}; //Kalman filter, seems to be broken when used in a list, needs to be looked into more.
+KickFiltersRT<float> LPfilter[3];
 
 
 const float fs = 1.0/0.000062;
@@ -76,8 +76,8 @@ void Sensor_Read() { //Reads the sensors and gives back the differance in Geuss.
     Sensor_readings[i] = analogRead(Sensor_pins[i]);
     
     // Filters, only one of them should be enabled at the time
-    Sensor_readings[i] = filters[i].lowpass(Sensor_readings[i], 30, fs); //LP
-    //Sensor_readings[i] = filter[i].updateEstimate(Sensor_readings[0]); //Kalman
+    Sensor_readings[i] = LPfilter[i].lowpass(Sensor_readings[i], 30, fs); //LP
+    //Sensor_readings[i] = Kalmanfilter[i].updateEstimate(Sensor_readings[0]); //Kalman
     
     Sensor_readings[i] *= Voltageconstant;
     Sensor_readings[i] -= Voltageoffset;
@@ -214,7 +214,7 @@ void loop() {
   
  
 
-  turn_X(round(output_x), round(output_z)); 
+  turn_X(round(output_x), round(output_z));  //You can adjust turn_X and turn_Y to choose which output algorithm to use, The old version is bugged, but has better performance.
   turn_Y(round(output_y), round(output_z));
 
   
