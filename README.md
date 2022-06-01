@@ -1,5 +1,5 @@
-# Bachelor_Thesis_E2207
-Repository made to contain all the code for our bachelor thesis
+# Magnetic levitation system: Design, prototyping and testing of a digital PID-controller
+Repository made to contain all the code for our bachelor's thesis
 
 Main: Includes the code for the microcontroller  
 Prev_mains: Previous versions of Main  
